@@ -1,6 +1,7 @@
 import React from 'react';
-import Image from '../../../resources/WOW-light-spear.jpg';
+
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -17,7 +18,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 500,
+    maxWidth: 300,
+    margin: 10
   },
   media: {
     height: 0,
@@ -38,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Item() {
+export default function Item(props) {
+  //const {item} = props.items;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -48,8 +51,26 @@ export default function Item() {
 
   return (
     <Card className = {classes.root}>
-      <CardHeader title = "WOW Light Spear" subheader = "World of Warcraft" />
-      <CardMedia className = {classes.media} image = {Image} title = "WOW Light Spear" />  
+      <CardHeader title = {props.items.name} subheader = {props.items.game} />
+      <CardMedia className = {classes.media} image = {props.items.image} title = "WOW Light Spear" />
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        <IconButton
+          className={clsx(classes.expand, {
+            [classes.expandOpen]: expanded,
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
+      </CardActions>  
     </Card>
   )
 }
