@@ -24,15 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
+export default function NavBar(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+ 
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,7 +51,7 @@ export default function NavBar() {
           <Typography variant = "h6" className={classes.title}>
             Auxiun
           </Typography>
-          {auth && (
+          {props.loggedIn && (
             <div>
               <IconButton
                 aria-label="account of current user"
