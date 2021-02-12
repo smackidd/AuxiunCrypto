@@ -5,12 +5,18 @@ import Content from './components/Content/content';
 
 function App() {
   const [loggedIn, setLoginStatus] = React.useState(false);
+  const [user, setUser] = React.useState([]);
+
+  const handleNewUser = (userInfo) => {
+    setUser([{userInfo}])
+    setLoginStatus(true);
+  }
 
   return (
     <div className="App">
-      <NavBar loggedIn={loggedIn}></NavBar>
+      <NavBar user={user} loggedIn={loggedIn}></NavBar>
       <br />
-      <Content loggedIn={loggedIn}/>  
+      <Content handleNewUser={(userInfo) => handleNewUser(userInfo)} user={user} loggedIn={loggedIn}/>  
     </div>
   );
 }

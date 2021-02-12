@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  account: {
+    marginRight: 20,
+    flexGrow: 1,
+  }
 }));
 
 export default function NavBar(props) {
@@ -52,8 +57,9 @@ export default function NavBar(props) {
             Auxiun
           </Typography>
           {props.loggedIn && (
-            <div>
+            <div>  
               <IconButton
+                className={classes.account}
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -82,7 +88,6 @@ export default function NavBar(props) {
               </Menu>
             </div>
           )}
-          
         </Toolbar>
       </AppBar>
     </div>

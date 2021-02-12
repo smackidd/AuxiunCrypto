@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function NavBar(props) {
+export default function Content(props) {
   const classes = useStyles();
 
   return (
@@ -26,7 +26,7 @@ export default function NavBar(props) {
           </Grid>
         </Grid>
         :
-        <LogIn ></LogIn>
+        <LogIn handleNewUser={props.handleNewUser} setUser={props.setUser} user={props.user}></LogIn>
       }   
     </div>
   )

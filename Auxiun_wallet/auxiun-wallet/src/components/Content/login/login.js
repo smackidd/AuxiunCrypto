@@ -19,7 +19,23 @@ export default function LogIn(props) {
   const [usernameInput, setUsername] = React.useState("");
   const [passwordInput, setPassword] = React.useState("");
 
+  function handleSubmit() {
+    //console.log("submitted");
+    const userInfo = {
+      username: usernameInput,
+      password: passwordInput
+    }
+    console.log(userInfo)
+    props.handleNewUser(userInfo)
+  }
 
+  const handleUsername = (event) => {
+    setUsername(event.target.value);
+  }
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+  }
 
   return (
     <div className={classes.root}>
@@ -27,7 +43,7 @@ export default function LogIn(props) {
       <TextField
         id="username-input"
         label="username"
-
+        onChange={(e) => handleUsername(e)}
         placeholder="username"
       />
       <br />
@@ -35,12 +51,12 @@ export default function LogIn(props) {
         id="password-input"
         type="password"
         label="password"
-
+        onChange={(e) => handlePassword(e)}
         placeholder="password"
       />
       <br />
       <ButtonGroup variant="contained" className={classes.submit}>
-        <Button color="primary">Submit</Button>
+        <Button color="primary" type="submit" onClick={() => handleSubmit()}>Submit</Button>
         <Button color="secondary">Cancel</Button>
       </ButtonGroup>
 
