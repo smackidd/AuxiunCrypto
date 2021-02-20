@@ -20,7 +20,10 @@ export default function Item(props) {
 
   return (
     <div>
+
       <Typography className={classes.root}>
+        Welcome, {props.user[0].userInfo.userInfo.username}
+        <br/>
         Balance: {balance} tokens
       </Typography>
       <Button 

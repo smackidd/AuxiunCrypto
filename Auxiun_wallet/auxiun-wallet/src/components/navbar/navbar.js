@@ -33,17 +33,40 @@ export default function NavBar(props) {
   const classes = useStyles();
   
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [accAnchorEl, setAccAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const accOpen = Boolean(accAnchorEl);
 
  
-
+  // Main Menu handling
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  
   const handleClose = () => {
     setAnchorEl(null);
+  }
+
+  const handleHome = () => {
+    setAnchorEl(null);
+    props.handleSetHome();
   };
+
+  const handleMarketplace = () => {
+    setAnchorEl(null);
+    props.handleSetMarketplace();
+  };
+
+  // Account Menu handling
+  const handleAccMenu = (event) => {
+    setAccAnchorEl(event.currentTarget);
+  };
+
+  const handleAccClose = () => {
+    setAccAnchorEl(null);
+  };
+
+  
 
 
   return (
@@ -51,8 +74,26 @@ export default function NavBar(props) {
       <AppBar position="static">
         <Toolbar>
           <IconButton edge = "start" className={classes.menuButton} color="inherit">
-            <MenuIcon />
+            <MenuIcon onClick={handleMenu} />
           </IconButton>
+          <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleHome}>Home</MenuItem>
+                <MenuItem onClick={handleMarketplace}>Marketplace</MenuItem>
+              </Menu>
           <Typography variant = "h6" className={classes.title}>
             Auxiun
           </Typography>
@@ -63,14 +104,14 @@ export default function NavBar(props) {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
+                onClick={(e) => handleAccMenu(e)}
                 color="inherit"
               >
                 <AccountCircle />
               </IconButton>
               <Menu
                 id="menu-appbar"
-                anchorEl={anchorEl}
+                anchorEl={accAnchorEl}
                 anchorOrigin={{
                   vertical: 'top',
                   horizontal: 'right',
@@ -80,11 +121,11 @@ export default function NavBar(props) {
                   vertical: 'top',
                   horizontal: 'right',
                 }}
-                open={open}
-                onClose={handleClose}
+                open={accOpen}
+                onClose={handleAccClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleAccClose}>Profile</MenuItem>
+                <MenuItem onClick={handleAccClose}>My account</MenuItem>
               </Menu>
             </div>
           )}

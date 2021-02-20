@@ -2,11 +2,10 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
-import FormGroup from '@material-ui/core/FormGroup';
 import Link from '@material-ui/core/Link';
+import FormGroup from '@material-ui/core/FormGroup';
 import { makeStyles, Typography, withWidth } from '@material-ui/core';
-import {getUserInfo} from './api';
-import Register from './register';
+import { saveUserInfo } from './api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,25 +22,28 @@ export default function LogIn(props) {
   const classes = useStyles();
   const [usernameInput, setUsername] = React.useState("");
   const [passwordInput, setPassword] = React.useState("");
-  const [unregistered, setUnregistered] = React.useState(false);
+  const [firstnameInput, setFirstname] = React.useState("");
+  const [lastnameInput, setLastname] = React.useState("");
+  
 
   function handleSubmit() {
+    //console.log("submitted");
     let userInfo = {
       username: usernameInput,
-      password: passwordInput
+      password: passwordInput,
+      firstName: firstnameInput,
+      lastName: lastnameInput
     }
+    console.log(userInfo)
 
-    // call the api to check username and get a response
-    const response = getUserInfo(userInfo)
-    
+    const response = saveUserInfo(userInfo);
+
     userInfo = {
       userInfo,
       authKey: response.authKey
     }
-    
-    // if successful, change the component view to homepage component and pass userInfo to the App state
-    if (response.success) props.handleNewUser(userInfo);
 
+    if(response.success) props.handleNewUser(userInfo);
   }
 
   const handleUsername = (event) => {
@@ -52,46 +54,56 @@ export default function LogIn(props) {
     setPassword(event.target.value);
   }
 
-  const handleRegistered = () => {
-    if(unregistered) setUnregistered(false);
-    else setUnregistered(true);
+  const handleFirstname = (event) => {
+    setFirstname(event.target.value);
+  }
+
+  const handleLastname = (event) => {
+    setLastname(event.target.value);
+  }
+
+  const handleUnregistered = () => {
+    props.handleRegistered();  
   }
 
   return (
-    <div className={classes.root}>
-      
-      { unregistered ? 
-        // registration form
-        <Register 
-          unregistered={unregistered} 
-          handleRegistered={() => handleRegistered()}
-          handleNewUser={props.handleNewUser} />
-        :
-        // login form
-        <FormGroup>
+    <FormGroup>
           <TextField
-            id="username-input"
+            variant="filled"
+            id="username-register"
             label="username"
             onChange={(e) => handleUsername(e)}
             placeholder="username"
           />
           <br />
           <TextField
-            id="password-input"
+            variant="filled"
+            id="password-register"
             type="password"
             label="password"
             onChange={(e) => handlePassword(e)}
             placeholder="password"
           />
           <br />
+          <TextField
+            id="firstname-register"
+            label="firstname"
+            onChange={(e) => handleFirstname(e)}
+            placeholder="first name"
+          />
+          <br />
+          <TextField
+            id="lastname-register"
+            label="lastname"
+            onChange={(e) => handleLastname(e)}
+            placeholder="last name"
+          />
           <ButtonGroup variant="contained" className={classes.submit}>
             <Button color="primary" type="submit" onClick={() => handleSubmit()}>Submit</Button>
             <Button color="secondary">Cancel</Button>
           </ButtonGroup>
           <br />
-          <p>Not yet registered? click <Link component="button" onClick={() => handleRegistered()}>here</Link></p>
-        </FormGroup>
-      }
-    </div>
+          <p>Already registered? click <Link component="button" onClick={() => handleUnregistered()}>here</Link></p> 
+        </FormGroup>  
   )
 }
