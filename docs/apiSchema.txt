@@ -1,0 +1,188 @@
+API routes for backend Node server:
+This is not an exhaustive list, please feel free to add to or modify it.
+I also could have completely missed something... or a few things, lol
+
+POST:  /api/user/login 	- handles user login
+POST:  /api/user/new  	- adds a new user to the db
+PUT:   /api/user	 	- update existing user
+DELETE:  /api/user 	- deletes existing user
+POST  /api/transaction/buy/coin  - allows a user to buy auxuin coin with fiat currency
+POST  /api/transaction/buy/asset  - allows a user to buy an asset with auxiun coin
+POST  /api/marketplace/asset/list  - allows a user to list an asset on the marketplace
+GET   /api/marketplace/assets  - gets all the available assets in the marketplace
+POST  /api/dev/asset/new  - allows a game dev to add assets to the marketplace
+POST  /api/dev/asset/verify  - allows a game dev to verify all assets owned by a particular user
+
+Some sample input/returns for each api:
+
+POST:  /api/user/login 	- handles user login
+
+  sample input: {
+  	“email” : “example@test.com”,
+  	“pass” : “123456”
+  }
+  successful return: {
+  	“success” : true,
+  	“authKey” : "h1L0aSy9aDSolno10q3hjgf123z059q5FA54"
+    user: {
+      fName:
+      lName:
+      ...
+    }
+  }
+  on fail: {
+  	“success” : false,
+  	“msg” : “Username/password do not match”
+  }
+
+POST:  /api/user/new  	- adds a new user to the db
+
+  sample input: {
+    "email" : "example@test.com",
+    "pass" : "123456",
+    "fistName" : "Bob",
+    "lastName" : "Jones"
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "Successfully created new user."
+  }
+  on fail: {
+    "success" : false,
+    "msg" : "User with email 'example@test.com' already exists."
+  }
+  other fail conditions: missing or invalid input
+
+PUT:   /api/user	 	- update existing user
+
+  sample input: {
+    "authKey" : "1as12asd556da456das132",
+    "email" : "example@test.com",
+    "update" : {
+      "firstName" : "Bobby",
+      ...etc
+    }
+  }
+  successful return: {
+    "success" : true,
+    "newUser" : {
+      "email" : "example@test.com",
+      "firstName" : "Bobby",
+      "lastName" : "Jones",
+      ...etc (includes all info except password/account num)
+    }
+  }
+  on fail: {
+    "success" : false,
+    "msg" : "AuthKey not valid or expired"
+  }
+  other fail conditions: updated email already exists, invalid input
+
+DELETE:  /api/user 	- deletes existing user
+
+  sample input: {
+    "authKey": "a5f1afa85f4a65f14a3",
+    "email" : "example@test.com"
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "User 'example@test.com' deleted Successfully"
+  }
+  on fail {
+  "success" : false,
+  "msg" : "No user with email 'example@test.com'"
+  }
+  other fail conditions: expired/invalid authKey
+
+POST  /api/transaction/buy/coin  - allows a user to buy auxuin coin with fiat currency
+
+  sample input: {
+    "authKey" : "54as54d56asd4a325s13",
+    "email" : "example@test.com",
+    "coinAmount" : 2.50
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "Successfully purchased 2.5 auxiun coin",
+    "newBalance" : 36.7832
+  }
+  on fail {
+  "success" : false,
+  "msg" : "invalid or expired authKey"
+  }
+  other fail conditions: ...
+
+POST  /api/transaction/buy/asset  - allows a user to buy an asset with auxiun coin
+
+  sample input: {
+    "authKey" : "f89hd8s9csdjr23jklj2309",
+    "email" : "example@test.com",
+    "assetHash" : "4da5s61a1cv65as1fcv5as"
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "Successfully purchased 4da5s61a1cv65as1fcv5as",
+    "newBalance" : 35.4632
+  }
+  on fail {
+  "success" : false,
+  "msg" : "insufficient funds"
+  }
+  other fail conditions: invalid authKey, invalid assetHash
+
+POST  /api/marketplace/asset/list  - allows a user to list an asset on the marketplace
+
+  sample input: {
+    "authKey" : "f89hd8s9csdjr23jklj2309",
+    "email" : "example@test.com",
+    "assetHash" : "4da5s61a1cv65as1fcv5as",
+    "price" : 2.89
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "Successfully listed 4da5s61a1cv65as1fcv5as"
+  }
+  on fail {
+  "success" : false,
+  "msg" : "invalid assetHash"
+  }
+  other fail conditions: invalid authKey, user "example@test.com" does not own asset
+
+GET   /api/marketplace/assets  - gets all the available assets in the marketplace
+
+  returns: [
+    {
+      "assetHash" : "4da5s61a1cv65as1fcv5as",
+      "forSaleBy" : "Blizzard Entertainment",
+      "price" : "1.32",
+      "listed" : "02/01/2021-16:30"
+    },
+    {}...
+  ]
+
+POST  /api/dev/asset/new  - allows a game dev to add assets to the marketplace
+
+  sample input: {
+    "authKey" : "bAs65f1as53385f8Gt46h",
+    "price" : 0.48,
+    "details": {name, desc... image}
+  }
+  successful return: {
+    "success" : true,
+    "msg" : "Successfully added 'fahs89h8as9ias901klmkls90' to the blockchain and marketplace",
+    "assetHash" : "fdffafas32f1as253f15"
+  }
+  on fail {
+  "success" : false,
+  "msg" : "invalid or expired authKey"
+  }
+  other fail conditions: ...
+
+POST  /api/dev/asset/verify  - allows a game dev to verify all assets owned by a particular user
+
+  sample input: {
+    "email" : "example@test.com"
+  }
+  successful return: {
+    "assetHashs" : ["jiopj2iorj2iojklasl2r21rjfi", "qalkfd9sadmh98032po87132i", "y89ykahdsh901lkankl9a", ...etc]
+  }
