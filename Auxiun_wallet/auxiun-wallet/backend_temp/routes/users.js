@@ -13,6 +13,8 @@ const Joi = require("@hapi/joi");
 //
 ////
 
+
+// Get all users
 router.route("/").get((req, res) => {
   User.find()
     .then((users) => res.json(users))
@@ -85,18 +87,21 @@ router.route("/login").post(async (req, res) => {
   //res.send('Logged in');
 });
 
+// get info for an individual user
 router.route("/:id").get((req, res) => {
   User.findById(req.params.id)
     .then((user) => res.json(user))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// delete a user
 router.route("/:id").delete((req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(() => res.json("User deleted"))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// update info for a user
 router.route("/update/:id").post((req, res) => {
   User.findById(req.params.id)
     .then((user) => {
