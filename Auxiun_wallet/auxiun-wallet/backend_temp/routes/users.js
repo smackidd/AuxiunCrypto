@@ -60,13 +60,13 @@ router.route("/add").post(async (req, res) => {
 //login
 router.route("/login").post(async (req, res) => {
   //VALIDATE THE REGISTERED INFO
-  const schema = Joi.object({
-    username: Joi.string().min(3).required(),
-    password: Joi.string().min(7).required(),
-  });
-  const { error } = schema.validate(req.body);
+ // const schema = Joi.object({
+ //   username: Joi.string().min(3).required(),
+ //   password: Joi.string().min(7).required(),
+//  });
+//  const { error } = schema.validate(req.body);
 
-  if (error) return res.status(400).send(error.details[0].message);
+ // if (error) return res.status(400).send(error.details[0].message);
 
   //Check database for login username
   const user = await User.findOne({
