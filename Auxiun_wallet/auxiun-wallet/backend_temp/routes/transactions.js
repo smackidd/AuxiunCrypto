@@ -27,28 +27,53 @@ router.route("/coin/").post(verify, async (req, res) => {
         .catch((err) => res.status(400).json("Error: " + err));
 })
 
-// Transaction via auxiun coin
-  
-router.route("/asset").post(async (req, res) => {
+// Buy asset with Auxiun coin
+// First verify auth-token
+// find balance of user with req.user returned from auth-token verify
+// find asset from assetsToken and confirm it is listed on marketplace
+// check price of asset to balance of user, catch error: insufficient funds
+// reduce user balance and save, unlist asset from marketplace and save
+// return asset hash and new balance of user. 
+router.route("/asset").post(verify, async (req, res) => {
+  let balance = 0.0;
+  const assetHash = req.body.assetHash
+  //Check database for user 
+  const user = await User.findById(req.user)
+    .catch((err) => res.status(400).json("Error: " + err))
 
-    //Check database for login username
-    const user = await User.findOne({
-    username: req.body.username,
-    });
-    if (!user) return res.status(400).send("Username does not exist");
+  //Check database for asset
+  const asset = await AssetsToken.findOne(assetHash)
+    .catch((err) => res.status(400).json("Error: " + err))
+  if (!asset.inmarketplace) res.status(400).send("Asset is not available in the marketplace")
 
-    const coinAmount = req.body.coinAmount;
+  //check price of asset to balance of user
+  if (asset.price > user.coinbalance) res.status(400).send("Insufficient Funds")
 
-    const newToken = AssetsToken({
-        token,
-        owner,
-        inmarketplace,
-        price,
-    });
+  //complete transaction in respective databases
+  await User.findById(req.user)
+    .then((user) => {
+      user.coinbalance -= asset.price;
+      balance = user.coinbalance;
 
-    // Post the new coinAmount to the DB
-    // Return the updated amount
+      user.save().catch((err) => res.status(400).json("Error: " + err))
+    })
+    .catch((err) => res.status(400).json("Error: " + err))
 
+  await AssetsToken.findOne(assetHash)
+    .then((asset) => {
+      asset.inmarketplace = false;
+
+      asset
+        .save()
+        .then((res) => {
+          res.json({
+            success: true,
+            msg: `Successfully purchased ${assetHash} for ${asset.price}`,
+            newBalance: balance
+          })
+        })
+    })
+    .catch((err) => res.status(400).json("Error: " + err))
 })
 
 module.exports = router;

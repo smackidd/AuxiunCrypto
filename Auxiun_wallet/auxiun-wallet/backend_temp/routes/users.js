@@ -132,7 +132,7 @@ router.route("/:id").put(async (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
 
-  // req.params.id == old username
+  
   User.findById(req.params.id)
     .then((user) => {
       if (username) user.username = username;
