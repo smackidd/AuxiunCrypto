@@ -16,10 +16,8 @@ const assetstokenSchema = new Schema({
         minLength: 1
     },
     inmarketplace: {
-        type: String,
+        type: Boolean,
         require: true,
-        unique: true,
-        trim: true,
     },
     price: {
         type: Number,

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    email: {
+    username: {
         type: String,
         require: true,
         unique: true,
@@ -26,12 +26,13 @@ const userSchema = new Schema({
         require: true,
         minLength: 1
     },
-    accountnumber:{
-        type: String,
-        require: true,
-        trim: true,
-        minLength: 1
-    },
+    // accountnumber:{
+    //     type: String,
+    //     require: true,
+    //     index: true,
+    //     unique: true,
+    //     minLength: 1
+    // },
     coinbalance:{
         type: Number,
         require: true,

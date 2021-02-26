@@ -18,12 +18,14 @@ connection.once('open', () => {
 });
 
 const usersRouter = require('./routes/users');
+const transactionsRouter = require('./routes/transactions');
 // const celebritiesRouter = require('./routes/celebrities');
 // const roomsRouter = require('./routes/rooms');
 
 
 
-app.use('/users', usersRouter);
+app.use('/api/user', usersRouter);
+app.use('/api/transaction/buy', transactionsRouter);
 // app.use('/celebrities', celebritiesRouter);
 // app.use('/rooms', roomsRouter);
 

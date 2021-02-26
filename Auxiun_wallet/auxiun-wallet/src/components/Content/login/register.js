@@ -26,24 +26,20 @@ export default function LogIn(props) {
   const [lastnameInput, setLastname] = React.useState("");
   
 
-  function handleSubmit() {
+  const handleSubmit = async () => {
     //console.log("submitted");
     let userInfo = {
       username: usernameInput,
       password: passwordInput,
-      firstName: firstnameInput,
-      lastName: lastnameInput
+      firstname: firstnameInput,
+      lastname: lastnameInput
     }
-    console.log(userInfo)
+    console.log("userInfo", userInfo)
 
-    const response = saveUserInfo(userInfo);
-
-    userInfo = {
-      userInfo,
-      authKey: response.authKey
-    }
-
-    if(response.success) props.handleNewUser(userInfo);
+    const response = await saveUserInfo(userInfo)
+    console.log("handleSubmit2", response);
+    
+    //if (response.data.success) props.handleNewUser(userInfo);
   }
 
   const handleUsername = (event) => {
@@ -67,43 +63,47 @@ export default function LogIn(props) {
   }
 
   return (
+    <div>
     <FormGroup>
-          <TextField
-            variant="filled"
-            id="username-register"
-            label="username"
-            onChange={(e) => handleUsername(e)}
-            placeholder="username"
-          />
-          <br />
-          <TextField
-            variant="filled"
-            id="password-register"
-            type="password"
-            label="password"
-            onChange={(e) => handlePassword(e)}
-            placeholder="password"
-          />
-          <br />
-          <TextField
-            id="firstname-register"
-            label="firstname"
-            onChange={(e) => handleFirstname(e)}
-            placeholder="first name"
-          />
-          <br />
-          <TextField
-            id="lastname-register"
-            label="lastname"
-            onChange={(e) => handleLastname(e)}
-            placeholder="last name"
-          />
-          <ButtonGroup variant="contained" className={classes.submit}>
-            <Button color="primary" type="submit" onClick={() => handleSubmit()}>Submit</Button>
-            <Button color="secondary">Cancel</Button>
-          </ButtonGroup>
-          <br />
-          <p>Already registered? click <Link component="button" onClick={() => handleUnregistered()}>here</Link></p> 
-        </FormGroup>  
+      <TextField
+        variant="filled"
+        id="username-register"
+        label="username"
+        onChange={(e) => handleUsername(e)}
+        placeholder="username"
+      />
+      <br />
+      <TextField
+        variant="filled"
+        id="password-register"
+        type="password"
+        label="password"
+        onChange={(e) => handlePassword(e)}
+        placeholder="password"
+      />
+      <br />
+      <TextField
+        id="firstname-register"
+        label="firstname"
+        onChange={(e) => handleFirstname(e)}
+        placeholder="first name"
+      />
+      <br />
+      <TextField
+        id="lastname-register"
+        label="lastname"
+        onChange={(e) => handleLastname(e)}
+        placeholder="last name"
+      />
+      
+      <br />
+       
+    </FormGroup>
+    <ButtonGroup variant="contained" className={classes.submit}>
+      <Button color="primary" type="submit" onClick={() => handleSubmit()} >Submit</Button>
+      <Button color="secondary" >Cancel</Button>
+    </ButtonGroup>
+    <p>Already registered? click <Link component="button" onClick={() => handleUnregistered()}>here</Link></p>
+    </div>  
   )
 }
