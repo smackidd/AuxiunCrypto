@@ -109,6 +109,8 @@ const catFile = async (cid) => {
     data.set(chunk, offset);
     offset += chunk.length;
   });
+  console.log(data);
+  fs.writeFileSync("./files/new.jfif", data);
 };
 
 const catJson = async (cid) => {
@@ -141,8 +143,13 @@ app.post("/add/asset", isAuth, async (req, res) => {
 app.get("/asset/json/:cid", async (req, res) => {
   const cid = req.params.cid;
   const retrievedJson = await catJson(cid);
-  console.log(retrievedJson);
-  res.send("look at the console in node");
+  res.json(retrievedJson);
+});
+
+app.get("/asset/file/:cid", async (req, res) => {
+  const cid = req.params.cid;
+  const retrievedFile = await catFile(cid);
+  res.send("Look at the node console.");
 });
 
 app.listen(3000, () => {
