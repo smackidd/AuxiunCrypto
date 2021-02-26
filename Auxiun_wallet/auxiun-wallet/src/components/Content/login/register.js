@@ -38,8 +38,12 @@ export default function LogIn(props) {
 
     const response = await saveUserInfo(userInfo)
     console.log("handleSubmit2", response);
+    userInfo = {
+      userInfo,
+      authKey: response.authKey
+    }
     
-    //if (response.data.success) props.handleNewUser(userInfo);
+    if (response.success) props.handleNewUser(userInfo);
   }
 
   const handleUsername = (event) => {
