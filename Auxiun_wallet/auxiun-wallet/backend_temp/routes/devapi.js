@@ -2,23 +2,23 @@ const router = require("./users");
 
 // Dev adds a new item on the marketplace
 
-router.route("/new").post(async (req, res) => {
+router.route("/new").post(verify, async (req, res) => {
 
-    //Check database for login username
-    const user = await User.findOne({
-    username: req.body.username,
-    });
-    if (!user) return res.status(400).send("Username does not exist");
+    
 
     const itemPrice = req.body.itemPrice;
     const details = { name: req.body.itemName, description: req.body.itemDescription };
     
     const newItem = Devs({
-        email,
-        password,
-        companyname,
-        authkey,
+        price: itemPrice,
+        details,
+        inmarketplace: true,
     });
+
+    //save the newAsset to assetsToken database and return the new _id
+    //place the _id in a variable
+
+    //save the new _id, price, and listdate to marketplace database
 
     // Inform if the item was successfully added to the blockchain and DB
     
@@ -26,16 +26,11 @@ router.route("/new").post(async (req, res) => {
 
 // Verify all items owned by a user
   
-router.route("/verify").post(async (req, res) => {
+router.route("/verify/:userId").post(verify, async (req, res) => {
 
-    //Check database for login username
-    const user = await User.findOne({
-    username: req.body.username,
-    });
-    if (!user) return res.status(400).send("Username does not exist");
+    
+    
 
-    const coinAmount = req.body.userEmail;
-
-    // Return all assets owned by the email which the owner verified
+    // Return all assets owned by the req.params.userID in the assetsToken database 
 
 })

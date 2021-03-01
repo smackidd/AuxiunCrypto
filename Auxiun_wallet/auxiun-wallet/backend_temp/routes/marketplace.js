@@ -2,35 +2,32 @@ const router = require("./users");
 
 // Users lists an asset on the marketplace
 
-router.route("/list").post(async (req, res) => {
+router.route("/list/:assetId").post(verify, async (req, res) => {
 
-    //Check database for login username
-    const user = await User.findOne({
-    username: req.body.username,
-    });
-    if (!user) return res.status(400).send("Username does not exist");
+    //find req.params.assetId in asstesTokenSchema
+    //confirm that req.body.userId matches the owner Id of the asset
+    //if confirmed, change inmarketplace to true
 
     const itemPrice = req.body.itemPrice;
+
+    // grab listdate and put it in a variable
     
     const newAsset = Marketplace({
-        tokenid,
-        price,
+        tokenid: req.params.assetId,
+        price: itemPrice,
         listdate,
     });
 
-    // Inform if the item was successfully listed
+    
+
+    // save the newAsset to the marketplace database
+    // and return the response as mentioned in Brad's API doc.
     
 })
 
 // Get information on all available items from the marketplace
   
-router.route("/assets").get(async (req, res) => {
-
-    //Check database for login username
-    const user = await User.findOne({
-    username: req.body.username,
-    });
-    if (!user) return res.status(400).send("Username does not exist");
+router.route("/assets").get(verify, async (req, res) => {
 
     // Return all assets on the marketplace
 

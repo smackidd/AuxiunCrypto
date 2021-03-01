@@ -11,7 +11,6 @@ const assetstokenSchema = new Schema({
     },
     owner: {
         type: String,
-        require: true,
         trim: true,
         minLength: 1
     },
@@ -25,6 +24,9 @@ const assetstokenSchema = new Schema({
         trim: true,
         minLength: 1
     }
+
+    // details object
+    
 }, {
     timestamps: true,
 });

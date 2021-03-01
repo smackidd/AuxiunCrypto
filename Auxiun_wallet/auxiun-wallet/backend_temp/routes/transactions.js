@@ -59,6 +59,12 @@ router.route("/asset").post(verify, async (req, res) => {
     })
     .catch((err) => res.status(400).json("Error: " + err))
 
+  /////
+  //
+  // remove from marketplace database too
+  //
+  /////
+
   await AssetsToken.findOne(assetHash)
     .then((asset) => {
       asset.inmarketplace = false;
