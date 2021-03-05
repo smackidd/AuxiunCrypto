@@ -23,7 +23,7 @@ router.route("/").get((req, res) => {
 
 //register a new user
 router.route("/new").post(async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   //VALIDATE THE REGISTERED INFO
   const schema = Joi.object({
     username: Joi.string().min(5).required(),
@@ -50,7 +50,7 @@ router.route("/new").post(async (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
 
-  let newUser = User({
+  let user = User({
     username,
     password,
     firstname,
@@ -58,18 +58,18 @@ router.route("/new").post(async (req, res) => {
     coinbalance: 0
   });
 
-  newUser
+  user
     .save()
     .then(async () => {
       const userID = await User.findOne({ username });
       //create and assign a web token
       const token = jwt.sign({ _id: userID._id }, process.env.TOKEN_SECRET);
       newUser = {
-        newUser,
+        user,
         success: true,
         authKey: token
       }
-      res.header("auth-token", token).json(newUser);
+      res.header("auth-token", token).send(newUser);
     })
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -77,6 +77,7 @@ router.route("/new").post(async (req, res) => {
 //login
 router.route("/login").post(async (req, res) => {
   //VALIDATE THE REGISTERED INFO
+  console.log("request", req.body);
   const schema = Joi.object({
     username: Joi.string().min(3).required(),
     password: Joi.string().min(7).required(),

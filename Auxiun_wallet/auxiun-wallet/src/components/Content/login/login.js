@@ -25,22 +25,22 @@ export default function LogIn(props) {
   const [passwordInput, setPassword] = React.useState("");
   const [unregistered, setUnregistered] = React.useState(false);
 
-  function handleSubmit() {
+  const handleSubmit = async () => {
     let userInfo = {
       username: usernameInput,
       password: passwordInput
     }
 
     // call the api to check username and get a response
-    const response = getUserInfo(userInfo)
+    const response = await getUserInfo(userInfo)
     
     userInfo = {
-      userInfo,
-      authKey: response.authKey
+      response
     }
-    
+    //console.log("userInfo", userInfo);
     // if successful, change the component view to homepage component and pass userInfo to the App state
-    if (response.success) props.handleNewUser(userInfo);
+    if (response.data.success) props.handleNewUser(userInfo);
+    else alert(response.data.message);
 
   }
 

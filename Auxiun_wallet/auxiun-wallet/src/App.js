@@ -9,9 +9,41 @@ function App() {
   const [home, setHome] = React.useState(true);
 
   const handleNewUser = (userInfo) => {
-    setUser([{userInfo}])
+    
+    setUser(userInfo.response.data)
     setLoginStatus(true);
   }
+
+  const handleUpdateBalance = (newBalance) => {
+    console.log("newBalance", newBalance)
+    const updatedUser = {
+      user: {
+        authKey: user.authKey,
+        success: user.success,
+        user: {
+          _id: user.user._id,
+          coinbalance: newBalance,
+          createdAt: user.user.createdAt,
+          firstname: user.user.firstname,
+          lastname: user.user.lastname,
+          password: user.user.password,
+          updatedAt: user.user.updatedAt,
+          username: user.user.username
+        }
+      }
+    }
+    setUser(updatedUser.user);
+  }
+    // setUser([{userInfo: {
+    //   response: {
+    //     data: {
+    //       user: {
+    //         coinbalance: newBalance
+    //       }
+    //     }
+    //   }    
+    // }}])
+  
 
   //toggles between Home and Marketplace
   const handleSetHome = () => {
@@ -31,7 +63,8 @@ function App() {
         handleSetMarketplace={() => handleSetMarketplace()}></NavBar>
       <br />
       <Content 
-        handleNewUser={(userInfo) => handleNewUser(userInfo)} 
+        handleNewUser={(userInfo) => handleNewUser(userInfo)}
+        handleUpdateBalance={(newBalance) => handleUpdateBalance(newBalance)} 
         user={user} 
         loggedIn={loggedIn}
         home={home}

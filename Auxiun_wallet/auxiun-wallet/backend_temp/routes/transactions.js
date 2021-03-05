@@ -14,6 +14,8 @@ router.route("/coin/").post(verify, async (req, res) => {
     //_id is contained in req.user which was passed from the token verification
     const user = await User.findById(req.user)
         .then((user) => {
+            console.log(user);
+            console.log(req.body.coinAmount);
             user.coinbalance += req.body.coinAmount;
             user
                 .save()

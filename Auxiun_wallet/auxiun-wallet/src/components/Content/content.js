@@ -38,7 +38,7 @@ export default function Content(props) {
             </Grid>
           }
           <Grid item xs={4}> 
-            <Balance user={props.user}></Balance>
+            <Balance user={props.user} handleUpdateBalance={props.handleUpdateBalance}></Balance>
           </Grid>
         </Grid>
         :
