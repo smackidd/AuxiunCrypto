@@ -1,6 +1,7 @@
 const router = require("./users");
 let AssetsToken = require("../models/assetsTokenSchema.js");
 let Marketplace = require("../models/marketplaceSchema.js");
+const verify = require("./verify-token");
 // Dev adds a new item on the marketplace
 
 router.route("/new").post(verify, async (req, res) => {
@@ -33,3 +34,5 @@ router.route("/verify/:userId").post(verify, async (req, res) => {
     // Return all assets owned by the req.params.userID in the assetsToken database 
 
 })
+
+module.exports = router;

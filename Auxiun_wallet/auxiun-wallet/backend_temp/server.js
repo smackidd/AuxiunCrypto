@@ -19,17 +19,18 @@ connection.once('open', () => {
 
 const usersRouter = require('./routes/users');
 const transactionsRouter = require('./routes/transactions');
-// const celebritiesRouter = require('./routes/celebrities');
-// const roomsRouter = require('./routes/rooms');
+const marketplaceRouter = require('./routes/marketplace');
+const devapiRouter = require('./routes/devapi');
 
 
 
 app.use('/api/user', usersRouter);
 app.use('/api/transaction/buy', transactionsRouter);
-// app.use('/celebrities', celebritiesRouter);
-// app.use('/rooms', roomsRouter);
+app.use('/api/marketplace/', marketplaceRouter);
+app.use('/api/dev/asset', devapiRouter);
 
 
+  
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

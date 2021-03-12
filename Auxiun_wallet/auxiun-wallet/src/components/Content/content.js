@@ -37,6 +37,9 @@ export default function Content(props) {
               <MarketPlace></MarketPlace> 
             </Grid>
           }
+          {
+            
+          }
           <Grid item xs={4}> 
             <Balance user={props.user} handleUpdateBalance={props.handleUpdateBalance}></Balance>
           </Grid>
