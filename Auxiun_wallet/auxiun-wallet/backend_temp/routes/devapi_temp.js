@@ -1,9 +1,11 @@
 const router = require("./users");
-let AssetsToken = require("../models/assetsTokenSchema.js");
-let Marketplace = require("../models/marketplaceSchema.js");
+
 // Dev adds a new item on the marketplace
 
 router.route("/new").post(verify, async (req, res) => {
+
+    
+
     const itemPrice = req.body.itemPrice;
     const details = { name: req.body.itemName, description: req.body.itemDescription };
     
@@ -26,9 +28,8 @@ router.route("/new").post(verify, async (req, res) => {
   
 router.route("/verify/:userId").post(verify, async (req, res) => {
 
-    AssetsToken.find({owner: req.params.userID})
-        .then((foundUserAssets) => res.json(foundUserAssets))
-        .catch(() => res.json("Error could not find assets for userId: " + req.params.userId));
+    
+    
 
     // Return all assets owned by the req.params.userID in the assetsToken database 
 
