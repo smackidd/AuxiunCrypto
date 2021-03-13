@@ -1,6 +1,7 @@
 import ItemList from './Items/item-list';
 import MarketPlace from './marketplace/marketplace';
 import Balance from './balance/balance';
+import DevItemForm from './devItemForm/devItemForm';
 import LogIn from './login/login';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
@@ -19,30 +20,35 @@ const useStyles = makeStyles((theme) => ({
 export default function Content(props) {
   const classes = useStyles();
   
-
   return (
     <div>
       {props.loggedIn ? 
         // When logged in, display the homepage components
         <Grid container spacing={2}>
           { 
-          // if Home is selected in the menu
-          props.home ?
-            <Grid item xs={8}>
+            // if Home is selected in the menu
+            props.home ?
+            <Grid item xs={6}>
               <ItemList></ItemList>
             </Grid>
           // else, if Marketplace is selected in the menu
             :
-            <Grid item xs={8} className={classes.marketplace}>
+            <Grid item xs={6} className={classes.marketplace}>
               <MarketPlace></MarketPlace> 
             </Grid>
           }
+          <Grid item xs={6}> 
           {
-            
+            // is user or developer? 
+            // if user, display balance on right side
+            // if developer, display add item form
+            props.user.user.developer ?
+            <DevItemForm></DevItemForm>
+            :
+            <Balance user={props.user} handleUpdateBalance={props.handleUpdateBalance}></Balance> 
           }
-          <Grid item xs={4}> 
-            <Balance user={props.user} handleUpdateBalance={props.handleUpdateBalance}></Balance>
           </Grid>
+          
         </Grid>
         :
         // else, display the login components

@@ -7,6 +7,7 @@ function App() {
   const [loggedIn, setLoginStatus] = React.useState(false);
   const [user, setUser] = React.useState([]);
   const [home, setHome] = React.useState(true);
+  
 
   const handleNewUser = (userInfo) => {
     

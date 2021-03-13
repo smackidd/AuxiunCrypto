@@ -29,7 +29,8 @@ router.route("/new").post(async (req, res) => {
     username: Joi.string().min(5).required(),
     password: Joi.string().min(6).required(),
     firstname: Joi.string().min(1).required(),
-    lastname: Joi.string().min(1).required()
+    lastname: Joi.string().min(1).required(),
+    dev: Joi.boolean().required()
   });
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -49,12 +50,14 @@ router.route("/new").post(async (req, res) => {
   const password = hashPassword;
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
+  const developer = req.body.dev;
 
   let user = User({
     username,
     password,
     firstname,
     lastname,
+    developer,
     coinbalance: 0
   });
 
