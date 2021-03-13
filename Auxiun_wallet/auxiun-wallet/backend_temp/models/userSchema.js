@@ -26,6 +26,10 @@ const userSchema = new Schema({
         require: true,
         minLength: 1
     },
+    developer: {
+        type: Boolean,
+        require: true,
+    },
     // accountnumber:{
     //     type: String,
     //     require: true,

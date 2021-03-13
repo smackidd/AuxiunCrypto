@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Content(props) {
   const classes = useStyles();
   
-
   return (
     <div>
       {props.loggedIn ? 
@@ -43,7 +42,7 @@ export default function Content(props) {
             // is user or developer? 
             // if user, display balance on right side
             // if developer, display add item form
-            props.dev ?
+            props.user.user.developer ?
             <DevItemForm></DevItemForm>
             :
             <Balance user={props.user} handleUpdateBalance={props.handleUpdateBalance}></Balance> 

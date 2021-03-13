@@ -7,7 +7,7 @@ function App() {
   const [loggedIn, setLoginStatus] = React.useState(false);
   const [user, setUser] = React.useState([]);
   const [home, setHome] = React.useState(true);
-  const [dev, setDev] = React.useState(true);
+  
 
   const handleNewUser = (userInfo) => {
     
@@ -69,7 +69,6 @@ function App() {
         user={user} 
         loggedIn={loggedIn}
         home={home}
-        dev={dev}
         handleSetHome={() => handleSetHome}/>  
     </div>
   );

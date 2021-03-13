@@ -4,6 +4,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles, Typography, withWidth } from '@material-ui/core';
 import { saveUserInfo } from './api';
 
@@ -24,6 +26,7 @@ export default function LogIn(props) {
   const [passwordInput, setPassword] = React.useState("");
   const [firstnameInput, setFirstname] = React.useState("");
   const [lastnameInput, setLastname] = React.useState("");
+  const [dev, setDev] = React.useState(false);
   
 
   const handleSubmit = async () => {
@@ -32,7 +35,8 @@ export default function LogIn(props) {
       username: usernameInput,
       password: passwordInput,
       firstname: firstnameInput,
-      lastname: lastnameInput
+      lastname: lastnameInput,
+      dev: dev
     }
     console.log("userInfo", userInfo)
 
@@ -63,9 +67,14 @@ export default function LogIn(props) {
     setLastname(event.target.value);
   }
 
+  const handleDevChange = (event) => {
+    setDev(event.target.checked);
+  }
+
   const handleUnregistered = () => {
     props.handleRegistered();  
   }
+  
 
   return (
     <div>
@@ -99,6 +108,10 @@ export default function LogIn(props) {
         label="lastname"
         onChange={(e) => handleLastname(e)}
         placeholder="last name"
+      />
+      <FormControlLabel
+        control={<Checkbox checked={dev} onChange={handleDevChange} name="Developer" />}
+        label="Developer"
       />
       
       <br />
