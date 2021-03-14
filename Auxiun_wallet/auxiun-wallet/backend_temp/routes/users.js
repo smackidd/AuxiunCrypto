@@ -30,7 +30,8 @@ router.route("/new").post(async (req, res) => {
     password: Joi.string().min(6).required(),
     firstname: Joi.string().min(1).required(),
     lastname: Joi.string().min(1).required(),
-    dev: Joi.boolean().required()
+    dev: Joi.boolean().required(),
+    companyname: Joi.string().min(1)
   });
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -51,6 +52,7 @@ router.route("/new").post(async (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const developer = req.body.dev;
+  const companyname = req.body.companyname;
 
   let user = User({
     username,
@@ -58,6 +60,7 @@ router.route("/new").post(async (req, res) => {
     firstname,
     lastname,
     developer,
+    companyname,
     coinbalance: 0
   });
 

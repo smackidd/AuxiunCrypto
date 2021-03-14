@@ -1,4 +1,5 @@
-const router = require("./users");
+const router = require("express").Router();
+// const router = require("./users");
 let AssetsToken = require("../models/assetsTokenSchema.js");
 let Marketplace = require("../models/marketplaceSchema.js");
 const jwt = require("jsonwebtoken");
@@ -7,6 +8,9 @@ const verify = require("./verify-token");
 // Users lists an asset on the marketplace
 // requires req.body.userId and req.body.itemPrice
 router.route("/asset/list/:assetId").post(verify, async (req, res) => {
+    const itemPrice = req.body.itemPrice;
+    //Get current date for list date
+    const listDate = new Date();
 
     //Find asset in assetTokenSchema through passed asset Id
     const asset = await AssetsToken.findOne({token: req.params.assetId})
@@ -16,6 +20,7 @@ router.route("/asset/list/:assetId").post(verify, async (req, res) => {
             //If successful set inmarketplace to true
             if(foundAsset.owner == req.body.userId){
                 foundAsset.inmarketplace = true;
+                foundAsset.price = itemPrice;
                 //save foundAsset in asset database
                 foundAsset.save()
             }
@@ -25,9 +30,7 @@ router.route("/asset/list/:assetId").post(verify, async (req, res) => {
         //If assetId could not be found throw error message assetId could not be found
         .catch(() => res.json({"success": false, "msg": "assetId could not be found"}));
 
-    const itemPrice = req.body.itemPrice;
-    //Get current date for list date
-    const listDate = new Date();
+    
 
     const newAsset = Marketplace({
         tokenid: req.params.assetId,
@@ -40,7 +43,7 @@ router.route("/asset/list/:assetId").post(verify, async (req, res) => {
         //If succesful respond with success json as per Brads API Schema
         .then(() => res.json({"success": true, "msg": "Successfully listed" + req.params.assetId}))
         //On Fail respond with failure json as per Brads API Schema
-        .catch((err) => res.json({"success": false, "msg": err}));
+        .catch((err) => res.json({"success": false, "Error": err}));
 })
 
 // Get information on all available items from the marketplace

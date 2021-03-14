@@ -30,6 +30,11 @@ const userSchema = new Schema({
         type: Boolean,
         require: true,
     },
+    companyname: {
+        type: String,
+        minLength: 1,
+        require: false
+    },
     // accountnumber:{
     //     type: String,
     //     require: true,
