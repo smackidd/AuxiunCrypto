@@ -1,55 +1,86 @@
-import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
-import { makeStyles, Typography, withWidth } from '@material-ui/core';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Input from '@material-ui/core/Input';
+import React from "react";
+import TextField from "@material-ui/core/TextField";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Link from "@material-ui/core/Link";
+import { makeStyles, Typography, withWidth } from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
 //import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 300,
-    paddingRight:50
+    paddingRight: 50
   },
   submit: {
     marginTop: 20,
     width: 150
-  }, 
+  },
   formGroup: {
     marginTop: 20
   },
   formControl: {
     //margin: theme.spacing(1),
-    width: 300,
+    width: 300
   },
   input: {
     marginTop: 20
   }
-}))
+}));
 
 export default function DevItemForm(props) {
   const classes = useStyles();
-  const [singleMulti, setSingleMulti] = React.useState('');
+  const [singleMulti, setSingleMulti] = React.useState("");
   const [multi, setMulti] = React.useState(false);
+  const [itemName, setItemName] = React.useState("");
+  const [itemDescription, setItemDescription] = React.useState("");
+  const [itemPrice, setItemPrice] = React.useState(0);
+  const [itemGame, setItemGame] = React.useState("");
 
   const handleSelect = (event) => {
     setSingleMulti(event.target.value);
-    if (event.target.value == 'Multiple') setMulti(true);
+    if (event.target.value == "Multiple") setMulti(true);
     else setMulti(false);
   };
 
+  const handleItemName = (event) => {
+    setItemName(event.target.value);
+  }
+
+  const handleDescription = (event) => {
+    setItemDescription(event.target.value);
+  }
+
+  const handleItemGame = (event) => {
+    setItemName(event.target.value);
+  }
+
+  const handlePrice = (event) => {
+    setItemPrice(parseFloat(event.target.value).toFixed(2));
+  }
+
+  const handleSubmit = () => {
+    // call to the api goes here
+    // I have created an api.js file that will contain
+    // all the outgoing api calls
+    // you can reference login.js to see how that is done.
+  }
+
   return (
     <div className={classes.root}>
-      <Typography variant="h2" component="h2">Add Items</Typography>
+      <Typography variant="h2" component="h2">
+        Add Items
+      </Typography>
       <FormControl variant="filled" className={classes.formControl}>
-        <InputLabel id="singleMultiSelect">Single or Multiple Tokens</InputLabel>
+        <InputLabel id="singleMultiSelect">
+          Single or Multiple Tokens
+        </InputLabel>
         <Select
           labelId="singleMultiSelect"
           id="singleMultiSelect"
@@ -61,29 +92,35 @@ export default function DevItemForm(props) {
         </Select>
       </FormControl>
       <FormGroup className={classes.formGroup}>
-        <Input 
+        <Input
           id="itemName"
           label="Item Name"
           placeholder="Item Name"
-          className={classes.input}  
+          onChange={(e) => handleItemName(e)}
+          className={classes.input}
         />
-        <TextField 
+        <TextField
           id="itemDescription"
           label="Item Description"
           variant="outlined"
           multiline
           rows={4}
           placeholder="Item Description"
+          onChange={(e) => handleDescription(e)}
           className={classes.input}
         />
-        <Button
-          variant="outlined"
-          color="default"
+        <Input
+          id="itemGame"
+          label="Game"
+          placeholder="Game"
+          onChange={(e) => handleItemGame(e)}
           className={classes.input}
-        >Upload Image
+        />
+        <Button variant="outlined" color="default" className={classes.input}>
+          Upload Image
           <Input
             type="file"
-            //hidden
+            // hidden
           />
         </Button>
         <Input
@@ -91,29 +128,30 @@ export default function DevItemForm(props) {
           label="Price"
           placeholder="Price"
           className={classes.input}
+          onChange={(e) => handlePrice(e)}
           startAdornment={<InputAdornment position="start">$</InputAdornment>}
         />
-        
-        {
-          multi && 
-          <Input 
+
+        {multi && (
+          <Input
             id="numTokens"
             label="Number of Tokens"
             placeholder={100}
             className={classes.input}
-            endAdornment={<InputAdornment position="end">Tokens</InputAdornment>}
+            endAdornment={
+              <InputAdornment position="end">Tokens</InputAdornment>
+            }
           />
-        }
+        )}
         <br />
-          <ButtonGroup variant="contained" className={classes.submit}>
-            <Button color="primary" type="submit">Submit</Button>
-            <Button color="secondary">Cancel</Button>
-          </ButtonGroup>
-          <br />
-
-
-        
+        <ButtonGroup variant="contained" className={classes.submit}>
+          <Button color="primary" type="submit" onClick={() => handleSubmit()}>
+            Submit
+          </Button>
+          <Button color="secondary">Cancel</Button>
+        </ButtonGroup>
+        <br />
       </FormGroup>
     </div>
-  )
+  );
 }
