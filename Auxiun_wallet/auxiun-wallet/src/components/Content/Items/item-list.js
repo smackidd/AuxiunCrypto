@@ -1,34 +1,25 @@
-import React from 'react';
-import Item from './item';
-import Image from '../../../resources/WOW-light-spear.jpg';
+import React, { useState, useEffect } from "react";
+import Item from "./item";
 
 export default function ItemList() {
-  const [items, showItems] = React.useState(
-    {
-      items: [
-        {
-          token: 1,
-          name: 'WOW Light Spear',
-          game: 'World of Warcraft',
-          image: Image,
-          description: ''
-        },
-        {
-          token: 2,
-          name: 'WOW Dark Spear',
-          game: 'World of Warcraft',
-          image: Image,
-          description: ''
-        }
-      ]
-    }
-  );
+  const [items, setItems] = useState([]);
+
+  useEffect(async () => {
+    const fetchedData = await fetch(
+      "http://localhost:3005/api/marketplace/assets"
+    )
+      .then((res) => res.json())
+      .then((data) => data);
+    setItems(fetchedData);
+  }, []);
 
   return (
     <div>
-      {items.items.map((item) => (
-        <Item items = {item}></Item>
-      ))}
+      {items.length ? (
+        items.map((item) => <Item key={item.image} items={item}></Item>)
+      ) : (
+        <p>No Items</p>
+      )}
     </div>
-  )
+  );
 }
