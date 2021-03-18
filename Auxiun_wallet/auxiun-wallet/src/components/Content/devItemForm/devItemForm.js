@@ -83,7 +83,7 @@ export default function DevItemForm(props) {
         >Upload Image
           <Input
             type="file"
-            hidden
+            //hidden
           />
         </Button>
         <Input
