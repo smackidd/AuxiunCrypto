@@ -2,61 +2,94 @@ const router = require("express").Router();
 let AssetsToken = require("../models/assetsTokenSchema.js");
 let Marketplace = require("../models/marketplaceSchema.js");
 const verify = require("./verify-token");
+
+const ipfsClient = require("ipfs-http-client");
+const ipfs = ipfsClient("http://localhost:5001");
 // Dev adds a new item on the marketplace
 
+const addJson = async (data) => {
+  const jsonAdded = await ipfs.add(JSON.stringify(data));
+  return jsonAdded.cid.toString();
+};
+
+const catJson = async (cid) => {
+  let stringified = "";
+  for await (const chunk of ipfs.cat(cid)) {
+    stringified += chunk.toString();
+  }
+  return JSON.parse(stringified);
+};
+
 router.route("/new").post(verify, async (req, res) => {
-    const itemPrice = req.body.itemPrice;
-    //const details = { name: req.body.itemName, description: req.body.itemDescription };
-    const assetHash = "QmSQwrhrhJKLUWo2oEBkhtdNN9k6S7o5eAyQNFWAb62QZK";
-    const listDate = new Date();
+  const body = req.body;
+  const itemPrice = body.itemPrice;
+  //const file = req.files.file;
 
-    /**
-     * Brad's IPFS code goes here
-     * it will return an assetHash which I will use in the following lines
-     * I am hard coding an assetHash for testing purposes for now
-     */
+  //const details = { name: req.body.itemName, description: req.body.itemDescription };
+  //const assetHash = "QmSQwrhrhJKLUWo2oEBkhtdNN9k6S7o5eAyQNFWAb62QZK";
+  const listDate = new Date();
 
+  /**
+   * Brad's IPFS code goes here
+   * it will return an assetHash which I will use in the following lines
+   * I am hard coding an assetHash for testing purposes for now
+   */
 
+  //console.log(body);
 
+  //const fileAdded = await ipfs.add(file.data);
+  //console.log(fileAdded);
 
-    
-    
-    
-    const newItem = AssetsToken({
-        token: assetHash,
-        owner: req.user,
-        inmarketplace: true,
-        price: itemPrice
-    });
+  const newAsset = {
+    name: body.name,
+    description: body.description,
+    game: body.game,
+    //image: fileAdded.cid.toString()
+    image: "image goes here"
+  };
 
-    //save the newAsset to assetsToken database 
-    newItem.save()
-        .catch((err) => res.json({"success": false, "Error": err}))
+  const newAssetCid = await addJson(newAsset);
+  //replace this with call to DB/Web3 create a token
+  //tempAssets.push(newAssetCid);
+  console.log(newAssetCid);
 
-    //save the new _id, price, and listdate to marketplace database
-    const marketplaceItem = Marketplace({
-        tokenid: assetHash,
-        price: itemPrice,
-        listdate: listDate
-    })
+  //
+  const newItem = AssetsToken({
+    token: newAssetCid,
+    inmarketplace: true,
+    price: itemPrice,
+    listdate: listDate
+  });
 
-    marketplaceItem.save()
-        .then((response) => res.json({"success": true, "msg": "Successfully added " + assetHash + " to the blockchain and marketplace", assetHash}))
-        .catch((err) => res.json({"success": false, "Error": err}))
-    // Inform if the item was successfully added to the blockchain and DB
-    
-})
+  //save the newAsset to assetsToken database
+  newItem
+    .save()
+    .then((response) =>
+      res.json({
+        success: true,
+        msg:
+          "Successfully added " +
+          newAssetCid +
+          " to the blockchain and marketplace",
+        newAssetCid
+      })
+    )
+    .catch((err) => res.json({ success: false, Error: err }));
+
+  //res.json({ msg: "Added new asset!", cid: newAssetCid });
+  // Inform if the item was successfully added to the blockchain and DB
+});
 
 // Verify all items owned by a user
-  
+
 router.route("/verify").get(verify, async (req, res) => {
+  AssetsToken.find({ owner: req.user })
+    .then((foundUserAssets) => res.json(foundUserAssets))
+    .catch(() =>
+      res.json("Error could not find assets for userId: " + req.params.userId)
+    );
 
-    AssetsToken.find({owner: req.user})
-        .then((foundUserAssets) => res.json(foundUserAssets))
-        .catch(() => res.json("Error could not find assets for userId: " + req.params.userId));
-
-    // Return all assets owned by the req.params.userID in the assetsToken database 
-
-})
+  // Return all assets owned by the req.params.userID in the assetsToken database
+});
 
 module.exports = router;
