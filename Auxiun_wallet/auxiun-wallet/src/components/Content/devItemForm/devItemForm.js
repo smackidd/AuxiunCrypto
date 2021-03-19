@@ -103,6 +103,7 @@ export default function DevItemForm(props) {
       .then((res) => res.json())
       .then((data) => data);
 
+    alert(resData.msg);
     console.log(resData);
   };
 

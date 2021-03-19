@@ -57,7 +57,7 @@ router.route("/asset/list/:assetId").post(verify, async (req, res) => {
   //Save new asset in marketplace database
   newAsset
     .save()
-    //If succesful respond with success json as per Brads API Schema
+    //If successful respond with success json as per Brads API Schema
     .then(() =>
       res.json({
         success: true,
