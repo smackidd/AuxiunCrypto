@@ -11,6 +11,7 @@ import Link from "@material-ui/core/Link";
 import { makeStyles, Typography, withWidth } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
+import { json } from "body-parser";
 //import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,8 @@ export default function DevItemForm(props) {
   const [itemDescription, setItemDescription] = React.useState("");
   const [itemPrice, setItemPrice] = React.useState(0);
   const [itemGame, setItemGame] = React.useState("");
+  const [itemFile, setItemFile] = React.useState(null);
+  const { authKey } = props.user;
 
   const handleSelect = (event) => {
     setSingleMulti(event.target.value);
@@ -51,26 +54,57 @@ export default function DevItemForm(props) {
 
   const handleItemName = (event) => {
     setItemName(event.target.value);
-  }
+  };
 
   const handleDescription = (event) => {
     setItemDescription(event.target.value);
-  }
+  };
 
   const handleItemGame = (event) => {
-    setItemName(event.target.value);
-  }
+    setItemGame(event.target.value);
+  };
+
+  const handleItemFile = (event) => {
+    setItemFile(event.target.files[0]);
+  };
 
   const handlePrice = (event) => {
     setItemPrice(parseFloat(event.target.value).toFixed(2));
-  }
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // call to the api goes here
     // I have created an api.js file that will contain
     // all the outgoing api calls
     // you can reference login.js to see how that is done.
-  }
+
+    // const body = {
+    //   name: itemName,
+    //   description: itemDescription,
+    //   game: itemGame,
+    //   price: itemPrice,
+    //   file: itemFile
+    // };
+
+    // console.log(body.file);
+
+    const formData = new FormData();
+    formData.append("name", itemName);
+    formData.append("description", itemDescription);
+    formData.append("game", itemGame);
+    formData.append("price", itemPrice);
+    formData.append("file", itemFile);
+
+    const resData = await fetch("http://localhost:5000/api/dev/asset/new", {
+      method: "POST",
+      headers: { "auth-token": authKey },
+      body: formData
+    })
+      .then((res) => res.json())
+      .then((data) => data);
+
+    console.log(resData);
+  };
 
   return (
     <div className={classes.root}>
@@ -119,7 +153,10 @@ export default function DevItemForm(props) {
         <Button variant="outlined" color="default" className={classes.input}>
           Upload Image
           <Input
+            id="itemFile"
+            label="Image Upload"
             type="file"
+            onChange={(e) => handleItemFile(e)}
             // hidden
           />
         </Button>

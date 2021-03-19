@@ -5,8 +5,8 @@ const verify = require("./verify-token");
 
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient("http://localhost:5001");
-// Dev adds a new item on the marketplace
 
+// Dev adds a new item on the marketplace
 const addJson = async (data) => {
   const jsonAdded = await ipfs.add(JSON.stringify(data));
   return jsonAdded.cid.toString();
@@ -22,8 +22,7 @@ const catJson = async (cid) => {
 
 router.route("/new").post(verify, async (req, res) => {
   const body = req.body;
-  const itemPrice = body.itemPrice;
-  //const file = req.files.file;
+  const file = req.files.file;
 
   //const details = { name: req.body.itemName, description: req.body.itemDescription };
   //const assetHash = "QmSQwrhrhJKLUWo2oEBkhtdNN9k6S7o5eAyQNFWAb62QZK";
@@ -37,15 +36,14 @@ router.route("/new").post(verify, async (req, res) => {
 
   //console.log(body);
 
-  //const fileAdded = await ipfs.add(file.data);
+  const fileAdded = await ipfs.add(file.data);
   //console.log(fileAdded);
 
   const newAsset = {
     name: body.name,
     description: body.description,
     game: body.game,
-    //image: fileAdded.cid.toString()
-    image: "image goes here"
+    image: fileAdded.cid.toString()
   };
 
   const newAssetCid = await addJson(newAsset);
@@ -57,7 +55,7 @@ router.route("/new").post(verify, async (req, res) => {
   const newItem = AssetsToken({
     token: newAssetCid,
     inmarketplace: true,
-    price: itemPrice,
+    price: body.price,
     listdate: listDate
   });
 

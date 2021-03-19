@@ -6,7 +6,7 @@ export default function ItemList() {
 
   useEffect(async () => {
     const fetchedData = await fetch(
-      "http://localhost:3005/api/marketplace/assets"
+      "http://localhost:3000/api/marketplace/assets"
     )
       .then((res) => res.json())
       .then((data) => data);
