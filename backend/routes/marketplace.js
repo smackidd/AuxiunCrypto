@@ -74,6 +74,8 @@ router.route("/assets").get((req, res) => {
   // Return all assets on the marketplace
   AssetsToken.find()
     .then(async (assets) => {
+      //TODO grab ipfs URI from the blockchain token id
+
       cidList = [];
       for (let i = 0; i < assets.length; i++) {
         const tokenObject = await catJson(assets[i].token);
@@ -85,12 +87,8 @@ router.route("/assets").get((req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
-// takes in token, owner, price...inmarketplace is set to true
-// QmVqPXY3Tu5tBhmnA4SFB24GrCH3ExnPGgZgqMVYGSnaJE
+// ? is this necessary
 
-//QmSQwrhrhJKLUWo2oEBkhtdNN9k6S7o5eAyQNFWAb62QZK
-
-//Qmb7vZiy6Lcngac9auL2ggqHJQWsDWP3TvivHcMSHymx8K
 router.route("/add").post((req, res) => {
   const asset = AssetsToken({
     token: req.body.token,

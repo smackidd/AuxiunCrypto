@@ -13,7 +13,6 @@ const Joi = require("@hapi/joi");
 //
 ////
 
-
 // Get all users
 router.route("/").get((req, res) => {
   User.find()
@@ -35,13 +34,13 @@ router.route("/new").post(async (req, res) => {
   });
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
- 
+
   //Check database for unique username
   const usernameExist = await User.findOne({
-    username: req.body.username,
+    username: req.body.username
   });
   if (usernameExist) return res.status(400).send("Username already exists");
-  
+
   //hash the password
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(req.body.password, salt);
@@ -54,6 +53,8 @@ router.route("/new").post(async (req, res) => {
   const developer = req.body.dev;
   const companyname = req.body.companyname;
 
+  //TODO create web3 account id object
+
   let user = User({
     username,
     password,
@@ -62,6 +63,7 @@ router.route("/new").post(async (req, res) => {
     developer,
     companyname,
     coinbalance: 0
+    //* blockchainAccountObject
   });
 
   user
@@ -74,7 +76,7 @@ router.route("/new").post(async (req, res) => {
         user,
         success: true,
         authKey: token
-      }
+      };
       res.header("auth-token", token).send(newUser);
     })
     .catch((err) => res.status(400).json("Error: " + err));
@@ -86,7 +88,7 @@ router.route("/login").post(async (req, res) => {
   console.log("request", req.body);
   const schema = Joi.object({
     username: Joi.string().min(3).required(),
-    password: Joi.string().min(7).required(),
+    password: Joi.string().min(7).required()
   });
   const { error } = schema.validate(req.body);
 
@@ -94,7 +96,7 @@ router.route("/login").post(async (req, res) => {
 
   //Check database for login username
   const user = await User.findOne({
-    username: req.body.username,
+    username: req.body.username
   });
   if (!user) return res.status(400).send("Username does not exist");
   //password is correct
@@ -107,7 +109,7 @@ router.route("/login").post(async (req, res) => {
     user,
     authKey: token,
     success: true
-  }
+  };
   res.header("auth-token", token).send(newUser);
 
   //res.send('Logged in');
@@ -130,16 +132,15 @@ router.route("/:id").delete((req, res) => {
 // update info for a user
 router.route("/:id").put(async (req, res) => {
   const username = req.body.username;
-  const hashPassword="";
-  if (req.body.password){
+  const hashPassword = "";
+  if (req.body.password) {
     //hash the password
     const salt = await bcrypt.genSalt(10);
-    hashPassword = await bcrypt.hash(req.body.password, salt);  
+    hashPassword = await bcrypt.hash(req.body.password, salt);
   }
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
 
-  
   User.findById(req.params.id)
     .then((user) => {
       if (username) user.username = username;

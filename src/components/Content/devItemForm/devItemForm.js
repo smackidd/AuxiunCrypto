@@ -93,6 +93,7 @@ export default function DevItemForm(props) {
     formData.append("description", itemDescription);
     formData.append("game", itemGame);
     formData.append("price", itemPrice);
+    //formData.append("multi", multi);
     formData.append("file", itemFile);
 
     const resData = await fetch("http://localhost:5000/api/dev/asset/new", {

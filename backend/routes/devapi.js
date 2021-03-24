@@ -12,13 +12,13 @@ const addJson = async (data) => {
   return jsonAdded.cid.toString();
 };
 
-const catJson = async (cid) => {
-  let stringified = "";
-  for await (const chunk of ipfs.cat(cid)) {
-    stringified += chunk.toString();
-  }
-  return JSON.parse(stringified);
-};
+// const catJson = async (cid) => {
+//   let stringified = "";
+//   for await (const chunk of ipfs.cat(cid)) {
+//     stringified += chunk.toString();
+//   }
+//   return JSON.parse(stringified);
+// };
 
 router.route("/new").post(verify, async (req, res) => {
   const body = req.body;
@@ -28,11 +28,7 @@ router.route("/new").post(verify, async (req, res) => {
   //const assetHash = "QmSQwrhrhJKLUWo2oEBkhtdNN9k6S7o5eAyQNFWAb62QZK";
   const listDate = new Date();
 
-  /**
-   * Brad's IPFS code goes here
-   * it will return an assetHash which I will use in the following lines
-   * I am hard coding an assetHash for testing purposes for now
-   */
+  // * For multi-token check body.multi and body.numTokens
 
   //console.log(body);
 
@@ -51,7 +47,8 @@ router.route("/new").post(verify, async (req, res) => {
   //tempAssets.push(newAssetCid);
   console.log(newAssetCid);
 
-  //
+  //TODO create web3 token using the newAssetCid
+
   const newItem = AssetsToken({
     token: newAssetCid,
     inmarketplace: true,
