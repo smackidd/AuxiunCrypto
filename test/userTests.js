@@ -1,6 +1,6 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = require("../backend/server"); //This reqiures the 'module.exports = app.listen(3000) line at the bottom of the server.js file.
+const server = require("../backend/server") //This reqiures the 'module.exports = app.listen(3000) line at the bottom of the server.js file.
 
 //Assertion Style
 chai.should();
@@ -63,7 +63,7 @@ describe('Users API', () => {
         })
 
         //DO NOT CHANGE STRING
-        const wrongID = '1234';
+        const wrongID = '12345';
 
         //Test for error response when incorrect id is passed
         it('Test: Error Response for Incorrect/Missing ID', (done) =>{
@@ -71,7 +71,7 @@ describe('Users API', () => {
                 .get('/api/user/'+wrongID)
                 .end((err, res) => {
                     //console.log(res.body);
-                    res.should.have.status(400);
+                    res.should.be.status(400);
                 })
             done();
         })
@@ -167,6 +167,48 @@ describe('Users API', () => {
                 .end((err ,res) => {
                     console.log(res.text);
                 })
+            done();
+        })
+
+        const missingPassword = {
+            username: "Tests-Dev1",
+            firstname: "Kaelan-Dev-Test",
+            lastname: "Kaelan-Dev-Test",
+            dev: true,
+            companyname: "DevTest"
+        }
+
+        it('Test: Missing Password', (done) =>{
+            chai.request(server)
+            .post('/api/user/new')
+            .send(missingPassword)
+            .end((err, res) => {
+                const string = '"password" is required'
+                //res.text.should.be.a(string);
+                res.should.be.status(400);
+                console.log(res.text);
+            })
+            done();
+        })
+
+        const missingUsername = {
+            password: "Tests-Dev1",
+            firstname: "Kaelan-Dev-Test",
+            lastname: "Kaelan-Dev-Test",
+            dev: true,
+            companyname: "DevTest"
+        }
+
+        it('Test: Missing Username', (done) =>{
+            chai.request(server)
+            .post('/api/user/new')
+            .send(missingUsername)
+            .end((err, res) => {
+                const string = '"password" is required'
+                //res.text.should.be.a(string);
+                res.should.be.status(400);
+                console.log(res.text);
+            })
             done();
         })
     })
