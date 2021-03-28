@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { green } from '@material-ui/core/colors';
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -13,6 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
+import AddCircle from "@material-ui/icons/AddCircle";
+import MonetizationOn from "@material-ui/icons/MonetizationOn";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 const ipfsUrl = "http://127.0.0.1:5001/api/v0/";
@@ -36,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: "rotate(180deg)"
   },
+  addSell: {
+    marginLeft: "auto",
+  },
   avatar: {
     //backgroundColor: red[500],
   },
@@ -49,6 +55,7 @@ export default function Item(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [imgUrl, setImgUrl] = useState("");
+  
 
   useEffect(async () => {
     //Fetch image from IPFS
@@ -93,6 +100,16 @@ export default function Item(props) {
     setExpanded(!expanded);
   };
 
+  const handleSellItem = () => {
+    // Include API call here to sell item to blockchain
+    alert("Selling Item");
+  }
+
+  const handleBuyItem = () => {
+    // Include API call here to buy item from blockchain
+    alert("Buying Item");
+  }
+
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.root}>
@@ -109,6 +126,21 @@ export default function Item(props) {
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>
+          {props.home ?
+            <IconButton 
+              className={classes.addSell} 
+              style={{color: green[500]}}
+              onClick={() => handleSellItem()}>
+              <MonetizationOn />
+            </IconButton>
+            :
+            <IconButton 
+              className={classes.addSell} 
+              color="primary"
+              onClick={() => handleBuyItem()}>
+              <AddCircle />
+            </IconButton>
+          }
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded

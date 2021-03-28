@@ -28,12 +28,12 @@ export default function Content(props) {
             // if Home is selected in the menu
             props.home ? (
               <Grid item xs={6}>
-                <ItemList></ItemList>
+                <ItemList home={props.home}></ItemList>
               </Grid>
             ) : (
               // else, if Marketplace is selected in the menu
               <Grid item xs={6} className={classes.marketplace}>
-                <MarketPlace></MarketPlace>
+                <MarketPlace home={props.home}></MarketPlace>
               </Grid>
             )
           }

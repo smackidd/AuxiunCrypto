@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-export default function ItemList() {
+export default function ItemList(props) {
   const classes = useStyles();
 
   const [items, showItems] = React.useState(
@@ -40,7 +40,7 @@ export default function ItemList() {
       <Typography variant="h2" className={classes.title}>Marketplace</Typography>
       <br/>
       {items.items.map((item) => (
-        <Item items = {item}></Item>
+        <Item items = {item} home={props.home}></Item>
       ))}
     </div>
   )

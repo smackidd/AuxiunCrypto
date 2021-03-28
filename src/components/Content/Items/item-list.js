@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Item from "./item";
 
-export default function ItemList() {
+export default function ItemList(props) {
   const [items, setItems] = useState([]);
   //const [reloadList, setReloadList] = useState(false);
 
@@ -18,7 +18,7 @@ export default function ItemList() {
   return (
     <div>
       {items.length ? (
-        items.map((item) => <Item key={item.image} items={item}></Item>)
+        items.map((item) => <Item key={item.image} items={item} home={props.home}></Item>)
       ) : (
         <p>No Items</p>
       )}
